@@ -1,5 +1,5 @@
 import React from 'react'
-import FinalList from './List/FinalList'
+import FinalList from './Component/List/FinalList'
 
 
 const App = () => {

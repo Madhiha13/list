@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import "../List_css/FinalList.css"
+
 import ProgressBar from './Sub_Component/ProgressBar';
-import { AddIcon,CartSvg,CircleSvg,FilterSvg,Co2,FolderSvg,GreenSvg,LeftArrow,PiechartSvg,UserSvg,WhitevariationSvg } from "../assets";
+import { AddIcon,CartSvg,CircleSvg,FilterSvg,Co2,FolderSvg,GreenSvg,LeftArrow,PiechartSvg,UserSvg,WhitevariationSvg } from "./../../assets";
 const FinalList= () => {
     const [dataArray, setDataArray] = useState([]);
      const [selectedYear, setSelectedYear] = useState(''); 

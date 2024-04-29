@@ -1,5 +1,5 @@
 import React from 'react';
-import "./../../List_css/ProgressBar.css"
+
 const ProgressBar = ({ progress }) => {
   
   const filledRectangles = Math.floor(progress / (100 / 12));
