@@ -1,30 +1,35 @@
 import React, { useState, useEffect } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 import ProgressBar from './Sub_Component/ProgressBar';
 import { AddIcon,CartSvg,CircleSvg,FilterSvg,Co2,FolderSvg,GreenSvg,LeftArrow,PiechartSvg,UserSvg,WhitevariationSvg } from "./../../assets";
 const FinalList= () => {
     const [dataArray, setDataArray] = useState([]);
      const [selectedYear, setSelectedYear] = useState(''); 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/api/data');
-                const jsonData = await response.json();
-                setDataArray(jsonData);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
+     const [filteredData, setFilteredData] = useState([]);
+     useEffect(() => {
+      const fetchData = async () => {
+          try {
+              const response = await fetch('http://localhost:5000/api/data');
+              const jsonData = await response.json();
+              setDataArray(jsonData);
+              setFilteredData(jsonData); // Initially set filtered data to all data
+          } catch (error) {
+              console.error('Error fetching data:', error);
+          }
+      };
 
-        fetchData();
-    }, []);
-
-    const handleButtonClick = (action) => {
-        // Handle button click based on the specified action
-        console.log(`Button clicked with action: ${action}`);
-        // Implement action logic as needed
-    };
-    const hasMoreUsers = dataArray.length > 3;
+      fetchData();
+  }, []);
+  const navigate = useNavigate();
+  const handleAddDataClick = () => {
+    navigate('/data-entry');
+};
+    // const handleButtonClick = (action) => {
+    //     // Handle button click based on the specified action
+    //     console.log(`Button clicked with action: ${action}`);
+    //     // Implement action logic as needed
+    // };
+    const hasMoreUsers = filteredData.length > 3;
 
     const yearRanges = [
         '2022-2023',
@@ -36,10 +41,17 @@ const FinalList= () => {
 
       ];
       const handleYearChange = (event) => {
-        setSelectedYear(event.target.value);
-        // Add logic here to handle the selected year
-      };
-    
+        const selected = event.target.value;
+        setSelectedYear(selected);
+
+        if (selected) {
+            const filtered = dataArray.filter(item => item.reportingYear === selected);
+            setFilteredData(filtered);
+        } else {
+            setFilteredData(dataArray);
+        }
+    };
+
   return (
     <div className="mobile-combustion-list">
       <div className="rectangle-parent">
@@ -170,7 +182,7 @@ const FinalList= () => {
                   <b className="emission-type">EMISSION TYPE</b>
                   <div className={`rectangle-group-container ${hasMoreUsers ? 'scrollable' : ''}`}>
                   <div>
-                  {dataArray.map((item)=>(
+                   {filteredData.map((item) => (
                   <div key={item.id} className="rectangle-group">
                     <div className="rectangle-div" />
                     <div className="frame-wrapper2">
@@ -198,7 +210,7 @@ const FinalList= () => {
                       <div className="manoj">{item.responsibilty}</div>
                     </div>
                     <div className="wrapper">
-                      <div className="div">{item.reportingYear}</div>
+                      <div className="div ">{item.reportingYear}</div>
                     </div>
                     <div className="frame-wrapper3">
                       <div className="rectangle-container">
@@ -209,17 +221,14 @@ const FinalList= () => {
                        
                       </div>
                     </div>
-                    <button onClick={() => handleButtonClick(item.button.action)} className="frame-button">
-                    {item.button.text}<div className="frame-child13" />
-                      <div className="add-1-wrapper">
-                        <img
-                          className="add-1-icon"
-                          alt=""
-                          src={AddIcon}
-                        />
-                      </div>
-                      <b className="add-data">ADD DATA</b>
-                    </button>
+                     <button onClick={handleAddDataClick} className="frame-button">
+                                                        {item.button.text}
+                                                        <div className="frame-child13" />
+                                                        <div className="add-1-wrapper">
+                                                            <img className="add-1-icon" alt="" src={AddIcon} />
+                                                        </div>
+                                                        <b className="add-data">ADD DATA</b>
+                                                    </button>
                   </div>
                 ))}
 
